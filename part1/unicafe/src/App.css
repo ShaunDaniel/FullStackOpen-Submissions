@@ -1,0 +1,25 @@
+*{
+    font-family: sans-serif;
+}
+
+button{
+    padding-inline: 1.5rem;
+    padding-block: 1rem;
+    margin-left: 2rem;
+    margin-top: 1rem;
+    
+}
+
+h3{
+    margin-top: 4rem;
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+
+td{
+    padding-inline: 1.5rem;
+    text-align: center;
+}
