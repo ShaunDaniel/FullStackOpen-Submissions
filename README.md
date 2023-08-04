@@ -7,7 +7,7 @@ This repository contains my submissions for the Fullstack Open program by the Un
 - [About](#about)
 - [Course Structure](#course-structure)
 - [Submissions](#submissions)
-- [License](#license)
+
 
 ## About
 
