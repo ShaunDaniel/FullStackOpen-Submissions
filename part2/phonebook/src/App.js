@@ -14,7 +14,15 @@ const App = () => {
 
   const addPerson = (e) =>{
     e.preventDefault()
-    setPersons(persons.concat({id:persons.length+1,name:newName.name}))
+    var dupliCheck = persons.some((person)=>person.name.toUpperCase()===newName.name.toUpperCase())
+    if(dupliCheck){
+      alert(`Cannot add ${newName.name}! Name already exists!`)
+    }
+    else{
+      setPersons(persons.concat({id:persons.length+1,name:newName.name}))
+    }
+       
+
   }
 
   return (
