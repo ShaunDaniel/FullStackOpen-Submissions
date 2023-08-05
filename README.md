@@ -42,3 +42,6 @@ Each part of the course has its own directory with relevant exercises/projects, 
 
 - ### Part 2 - Communicating with Server
   1.  [courseinfo](https://github.com/ShaunDaniel/FullStackOpen-Submissions/tree/main/part2/courseinfo)
+  2.  [notes](https://github.com/ShaunDaniel/FullStackOpen-Submissions/tree/main/part2/notes)
+  3.  [phonebook](https://github.com/ShaunDaniel/FullStackOpen-Submissions/tree/main/part2/phonebook) - [view site](https://full-stack-open-submissions-notes.vercel.app)
+     
