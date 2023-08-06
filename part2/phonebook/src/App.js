@@ -1,60 +1,83 @@
 import { useEffect, useState } from "react";
+import "./App.css";
+
+
+import contactService from "./services/contacts.js"
+
 import AddContact from "./components/AddContact.js";
 import Search from "./components/Search.js";
 import Contact from "./components/Contacts.js";
-import axios from "axios";
-import "./App.css";
 
 const App = () => {
+  
   const [persons, setPersons] = useState([]);
-
-  useEffect(() => {
-    axios.get("http://localhost:3002/persons").then((res) => {
-      setPersons(res.data);
-    });
-  }, []);
-
   const [newName, setNewName] = useState({ name: "", number: "" });
   const [filtered, setFiltered] = useState(false);
   const [filter_query, setFilterQuery] = useState("");
 
-  const filteredArray = filtered
-    ? persons.filter((person) =>
+
+  useEffect(() => {
+    contactService.getAll().then((res) => {
+      setPersons(res.data);
+    });
+  }, []);
+
+
+  
+  //filtered flag setter
+  const handleFilter = (e) => {
+    setFilterQuery(e.target.value);
+    e.target.value = "" ? setFiltered(false) : setFiltered(true);
+  };
+  //checks if filtered is true & filters & updates person state acc to search term
+  const filteredArray = filtered ? persons.filter((person) =>
         person.name.toLowerCase().includes(filter_query.toLowerCase())
       )
     : persons;
 
+  // storing states of name & number input fields
+
   const handleNumber = (e) => {
     setNewName({ ...newName, number: e.target.value });
-  };
-
-  const handleFilter = (e) => {
-    setFilterQuery(e.target.value);
-    e.target.value = "" ? setFiltered(false) : setFiltered(true);
   };
 
   const handleName = (e) => {
     setNewName({ ...newName, name: e.target.value });
   };
 
+
+  const handleDelete = (e) =>{
+    const deleteConfirm = window.confirm(`Do you wish to delete ${persons.find((person) => person.id===Number((e.target.value))).name}?`)
+    if(deleteConfirm){contactService.deleteContact(e.target.value).then((res)=>{
+      setPersons(persons.filter((person)=>person.id!==Number(e.target.value)))
+    })} 
+  }
+
   const addPerson = (e) => {
     e.preventDefault();
-    var dupliCheck = persons.some(
-      (person) => person.name.toUpperCase() === newName.name.toUpperCase()
-    );
+    
+    var dupliCheck = persons.some((person) => person.name.toUpperCase() === newName.name.toUpperCase());
     var contCheck = persons.some((person) => person.number === newName.number);
+    
     if (dupliCheck) {
-      alert(`Cannot add ${newName.name}! Name already exists!`);
-    } else if (contCheck) {
-      alert(
-        `Cannot add the number - ${newName.number}! Number already exists!`
-      );
-    } else {
-      axios.post("http://localhost:3002/persons",newName).then((res)=>{
+      const replaceCheck = window.confirm(`${newName.name} already exists in phonebook! Do you want to replace the old number with ${newName.number}?`);
+      if(replaceCheck) {contactService.updateContact(newName,persons.filter((person)=>person.name===newName.name)[0].id).then((res)=>{
+        console.log(res)
+        window.location.reload()
+      })}
+
+    } 
+    
+    else if (contCheck) {
+      alert(`Cannot add the number - ${newName.number}! Number already exists!`);
+    } 
+    
+    else {
+      contactService.createContact(newName).then((res)=>{
         console.log(res)
         setPersons([...persons,newName])
-      })
-
+        setNewName({name:"",number:""})
+      })     
     }
   };
 
@@ -66,16 +89,11 @@ const App = () => {
       <div className="d-flex justify-content-around flex-column flex-md-row">
       
         <div className="add-contact flex-fill">
-          <AddContact
-            addPerson={addPerson}
-            newName={newName}
-            handleName={handleName}
-            handleNumber={handleNumber}
-          />
+          <AddContact addPerson={addPerson} newName={newName} handleName={handleName} handleNumber={handleNumber}/>
           <Search filter_query={filter_query} handleFilter={handleFilter} />
         </div>
         <div className="search-and-display flex-fill">
-          <Contact filteredArray={filteredArray} />
+          <Contact filteredArray={filteredArray} handleDelete={handleDelete}/>
         </div>
       </div>
     </>

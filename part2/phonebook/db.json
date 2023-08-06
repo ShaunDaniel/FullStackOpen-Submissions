@@ -2,13 +2,8 @@
   "persons": [
     {
       "name": "Arto Hellas",
-      "number": "040-123456",
+      "number": "29-23-6423124",
       "id": 1
-    },
-    {
-      "name": "Ada Lovelace",
-      "number": "39-44-5323523",
-      "id": 2
     },
     {
       "name": "Dan Abramov",
@@ -21,29 +16,14 @@
       "id": 4
     },
     {
-      "name": "Shaun Daniel",
-      "number": "123",
-      "id": 5
-    },
-    {
       "name": "John Doe",
       "number": "555-1234",
       "id": 6
     },
     {
-      "name": "Jane Smith",
-      "number": "789-4567",
-      "id": 7
-    },
-    {
       "name": "Alex Johnson",
       "number": "987-6543",
       "id": 8
-    },
-    {
-      "name": "Emily Brown",
-      "number": "246-1357",
-      "id": 9
     },
     {
       "name": "Michael Lee",
