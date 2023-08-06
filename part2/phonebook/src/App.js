@@ -1,27 +1,20 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import AddContact from './components/AddContact.js'
 import Search from './components/Search.js'
 import Contact from './components/Contacts.js'
+import axios from "axios"
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { 
-      id:1,
-      name: 'Arto Hellas',
-      number: '9627391823'
-    },
-    { 
-      id:2,
-      name: 'Shaun Daniel',
-      number: '8293847615'
-    },
-    { 
-      id:3,
-      name: 'Benny Daniel',
-      number: '7162534251'
-    },
-  ])
 
+  
+
+  const [persons, setPersons] = useState([])
+
+  useEffect(()=>{
+    axios.get("http://localhost:3002/persons").then((res)=>{
+      setPersons(res.data)
+    }) 
+  },[])
   
   const [newName, setNewName] = useState({id:0,name:'',number:''})
   const [filtered, setFiltered] = useState(false)
