@@ -29,7 +29,10 @@ const App = (props) => {
       content:newNote.content,
       important:newNote.important,
     }
-    setNotes(notes.concat(newNoteObj))
+    axios.post("http://localhost:3002/notes",newNoteObj).then((response)=>{
+      console.log(response)
+      setNotes([...notes,newNoteObj])
+    })
     setNewNote({id:0,content:'',important:false})
     console.log(notes)
   }
