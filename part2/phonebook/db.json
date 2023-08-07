@@ -1,16 +1,6 @@
 {
   "persons": [
     {
-      "name": "Arto Hellas",
-      "number": "29-23-6423124",
-      "id": 1
-    },
-    {
-      "name": "Dan Abramov",
-      "number": "12-43-234345",
-      "id": 3
-    },
-    {
       "name": "Mary Poppendieck",
       "number": "39-23-6423122",
       "id": 4
@@ -21,13 +11,8 @@
       "id": 6
     },
     {
-      "name": "Alex Johnson",
-      "number": "987-6543",
-      "id": 8
-    },
-    {
       "name": "Michael Lee",
-      "number": "777-8888",
+      "number": "9203984763",
       "id": 10
     },
     {

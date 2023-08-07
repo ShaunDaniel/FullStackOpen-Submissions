@@ -8,21 +8,35 @@ import AddContact from "./components/AddContact.js";
 import Search from "./components/Search.js";
 import Contact from "./components/Contacts.js";
 
+
 const App = () => {
   
   const [persons, setPersons] = useState([]);
-  const [newName, setNewName] = useState({ name: "", number: "" });
+  const [newName, setNewName] = useState({ id:0,name: "", number: "" });
   const [filtered, setFiltered] = useState(false);
   const [filter_query, setFilterQuery] = useState("");
+  const [alert,setAlert] = useState({
+    alert: "d-none",
+    alertText: ""
+  })
 
 
   useEffect(() => {
     contactService.getAll().then((res) => {
       setPersons(res.data);
     });
-  }, []);
+  }, [persons]);
 
 
+  const resetAlert = () => {
+    setTimeout(() => {
+      setAlert({
+        alert: "d-none",
+        alertText: ""
+      })
+    }, 2500);
+    
+  }
   
   //filtered flag setter
   const handleFilter = (e) => {
@@ -50,33 +64,39 @@ const App = () => {
     const deleteConfirm = window.confirm(`Do you wish to delete ${persons.find((person) => person.id===Number((e.target.value))).name}?`)
     if(deleteConfirm){contactService.deleteContact(e.target.value).then((res)=>{
       setPersons(persons.filter((person)=>person.id!==Number(e.target.value)))
+      setAlert({alert:"d-block row mx-2 w-50 lh-1 alert alert-success",alertText:"Contact deleted successfully!"})
+      resetAlert() 
+    }).catch((error)=>{
+      setAlert({alert:"d-block row mx-2 w-50 lh-1 alert alert-danger",alertText:`404! Contact doesn't exist! ${error}`})
+      resetAlert() 
     })} 
   }
 
   const addPerson = (e) => {
     e.preventDefault();
-    
     var dupliCheck = persons.some((person) => person.name.toUpperCase() === newName.name.toUpperCase());
     var contCheck = persons.some((person) => person.number === newName.number);
     
     if (dupliCheck) {
       const replaceCheck = window.confirm(`${newName.name} already exists in phonebook! Do you want to replace the old number with ${newName.number}?`);
       if(replaceCheck) {contactService.updateContact(newName,persons.filter((person)=>person.name===newName.name)[0].id).then((res)=>{
-        console.log(res)
-        window.location.reload()
+        setAlert({alert:"d-block row mx-2 w-50 lh-1 alert alert-success",alertText:"Contact updated successfully!"})
+        resetAlert() 
       })}
 
     } 
     
     else if (contCheck) {
-      alert(`Cannot add the number - ${newName.number}! Number already exists!`);
+      setAlert({alert:"d-block row mx-2 w-50 lh-1 alert alert-danger",alertText:"Number already exists!"})
+      resetAlert() 
     } 
     
     else {
       contactService.createContact(newName).then((res)=>{
-        console.log(res)
         setPersons([...persons,newName])
         setNewName({name:"",number:""})
+        setAlert({alert:"d-block row mx-2 w-50 lh-1 alert alert-success",alertText:"Contact added successfully!"})
+        resetAlert()  
       })     
     }
   };
@@ -89,7 +109,7 @@ const App = () => {
       <div className="d-flex justify-content-around flex-column flex-md-row">
       
         <div className="add-contact flex-fill">
-          <AddContact addPerson={addPerson} newName={newName} handleName={handleName} handleNumber={handleNumber}/>
+          <AddContact addPerson={addPerson} newName={newName} handleName={handleName} handleNumber={handleNumber} alert={alert}/>
           <Search filter_query={filter_query} handleFilter={handleFilter} />
         </div>
         <div className="search-and-display flex-fill">
