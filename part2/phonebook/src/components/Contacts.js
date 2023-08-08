@@ -17,8 +17,8 @@ const Contact = (props) => {
                 <tbody>
                 {props.filteredArray.map((person)=>
                     <tr key={"contact_"+person.id}>
-                        <td key={person.id}>{person.name}</td>
-                        <td key={`num_`+person.id}>{person.number}</td>
+                        <td style={{maxWidth:"15vw",overflow:"hidden",textOverflow:"ellipsis"}} key={person.id}>{person.name}</td>
+                        <td style={{maxWidth:"15vw",overflow:"hidden",textOverflow:"ellipsis"}}  key={`num_`+person.id}>{person.number}</td>
                         <td className="d-flex justify-content-center"><button value={person.id} onClick={props.handleDelete} className="btn btn-danger">Delete</button></td>
 
                     </tr>

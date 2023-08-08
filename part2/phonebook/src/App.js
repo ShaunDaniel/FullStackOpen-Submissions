@@ -7,6 +7,7 @@ import contactService from "./services/contacts.js"
 import AddContact from "./components/AddContact.js";
 import Search from "./components/Search.js";
 import Contact from "./components/Contacts.js";
+import Footer from "./components/Footer.js"
 
 
 const App = () => {
@@ -25,7 +26,7 @@ const App = () => {
     contactService.getAll().then((res) => {
       setPersons(res.data);
     });
-  }, [persons]);
+  }, []);
 
 
   const resetAlert = () => {
@@ -52,11 +53,11 @@ const App = () => {
   // storing states of name & number input fields
 
   const handleNumber = (e) => {
-    setNewName({ ...newName, number: e.target.value });
+    setNewName({ ...newName, number: e.target.value, id:persons.length+1 });
   };
 
   const handleName = (e) => {
-    setNewName({ ...newName, name: e.target.value });
+    setNewName({ ...newName, name: e.target.value,id:persons.length+1 });
   };
 
 
@@ -79,7 +80,9 @@ const App = () => {
     
     if (dupliCheck) {
       const replaceCheck = window.confirm(`${newName.name} already exists in phonebook! Do you want to replace the old number with ${newName.number}?`);
-      if(replaceCheck) {contactService.updateContact(newName,persons.filter((person)=>person.name===newName.name)[0].id).then((res)=>{
+      const existingContact = persons.filter((person)=>person.name.toUpperCase()===newName.name.toUpperCase())[0]
+      if(replaceCheck) {contactService.updateContact({"name":newName.name,"number":newName.number},existingContact.id).then((res)=>{
+        setPersons(persons.map(person => person.id === existingContact.id ? { ...person, number: newName.number } : person));
         setAlert({alert:"d-block row mx-2 w-50 lh-1 alert alert-success",alertText:"Contact updated successfully!"})
         resetAlert() 
       })}
@@ -92,9 +95,10 @@ const App = () => {
     } 
     
     else {
+
       contactService.createContact(newName).then((res)=>{
         setPersons([...persons,newName])
-        setNewName({name:"",number:""})
+        setNewName({name:"",number:"",id:0})
         setAlert({alert:"d-block row mx-2 w-50 lh-1 alert alert-success",alertText:"Contact added successfully!"})
         resetAlert()  
       })     
@@ -103,6 +107,7 @@ const App = () => {
 
   return (
     <>
+      <div className="min-vh-100 d-flex flex-column justify-content-between">
       <div className="navbar nav m-0 p-2">
         <h2 className="app-title navbar-brand fs-2 px-2 text-light fw-bolder">📞 Phonebook</h2>
       </div>
@@ -115,6 +120,8 @@ const App = () => {
         <div className="search-and-display flex-fill">
           <Contact filteredArray={filteredArray} handleDelete={handleDelete}/>
         </div>
+      </div>
+      <Footer/>
       </div>
     </>
   );
